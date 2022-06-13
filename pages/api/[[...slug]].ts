@@ -8,7 +8,7 @@ import {
   ValidateEnumPipe,
 } from '@storyofams/next-api-decorators';
 import mime from 'mime-types';
-import { NextApiResponse } from 'next';
+import type { NextApiResponse } from 'next';
 
 import { getResizedAirlineImage } from '../../src/airline-image/airline-image.service';
 import {
