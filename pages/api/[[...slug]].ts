@@ -19,6 +19,7 @@ import {
 class ImageController {
   @Get('/airline/type/:type/width/:width/code/:code/extension/:extension')
   @SetHeader('Content-Disposition', 'inline')
+  @SetHeader('Cache-Control', `s-maxage=${86400 * 7}, stale-while-revalidate=${86400 * 30}`)
   async getAirlineImage(
     @Param('type', ValidateEnumPipe({ type: AirlineImageTypesEnum })) type: AirlineImageTypesEnum,
     @Param('width', ParseNumberPipe) width: number,

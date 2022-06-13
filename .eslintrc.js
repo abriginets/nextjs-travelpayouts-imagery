@@ -8,6 +8,7 @@ module.exports = {
     'plugin:import/warnings',
     'plugin:import/typescript',
     'plugin:prettier/recommended',
+    'plugin:@next/next/recommended',
   ],
   plugins: ['@typescript-eslint', 'prettier'],
   parserOptions: {
