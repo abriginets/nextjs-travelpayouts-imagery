@@ -5,9 +5,12 @@ import { AirlineImageFormatEnum, AirlineImageTypesEnum } from './interfaces/airl
 
 export async function fetchImage(airlineIata: string, urlType: AirlineImageTypesEnum): Promise<Buffer> {
   const type = urlType === AirlineImageTypesEnum.REGULAR ? '' : `${urlType}/`;
-  const image = await axios.get<ArrayBuffer>(`https://pics.avs.io/${type}/1000/1000/${airlineIata.toUpperCase()}.png`, {
-    responseType: 'arraybuffer',
-  });
+  const image = await axios.get<ArrayBuffer>(
+    `https://pics.avs.io/${type}/500/500/${airlineIata.toUpperCase()}@2x.png`,
+    {
+      responseType: 'arraybuffer',
+    },
+  );
 
   return Buffer.from(image.data);
 }
