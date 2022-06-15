@@ -22,6 +22,7 @@ class ImageController {
   @Get('/airline/type/:type/width/:width/code/:code/extension/:extension')
   @SetHeader('Content-Disposition', 'inline')
   @SetHeader('Cache-Control', `s-maxage=${86400 * 7}, stale-while-revalidate=${86400 * 30}`)
+  @SetHeader('Cloudflare-CDN-Cache-Control', `s-maxage=${86400 * 7}, stale-while-revalidate=${86400 * 30}`)
   async getAirlineImage(
     @Param('type', ValidateEnumPipe({ type: AirlineImageTypesEnum })) type: AirlineImageTypesEnum,
     @Param('width', ParseNumberPipe) width: number,
@@ -39,6 +40,7 @@ class ImageController {
   @Get('/location/code/:iata/width/:width/height/:height/extension/:extension')
   @SetHeader('Content-Disposition', 'inline')
   @SetHeader('Cache-Control', `s-maxage=${86400 * 7}, stale-while-revalidate=${86400 * 30}`)
+  @SetHeader('Cloudflare-CDN-Cache-Control', `s-maxage=${86400 * 7}, stale-while-revalidate=${86400 * 30}`)
   async getLocationImage(
     @Param('iata') code: string,
     @Param('width', ParseNumberPipe) width: number,
