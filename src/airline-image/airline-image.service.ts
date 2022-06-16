@@ -1,9 +1,10 @@
 import axios from 'axios';
 import sharp from 'sharp';
 
+import { getRedis } from '../redis/redis.service';
 import { AirlineImageFormatEnum, AirlineImageTypesEnum } from './interfaces/airline-image.interface';
 
-export async function fetchImage(airlineIata: string, urlType: AirlineImageTypesEnum): Promise<Buffer> {
+export async function fetchImageBuffer(airlineIata: string, urlType: AirlineImageTypesEnum): Promise<Buffer> {
   const type = urlType === AirlineImageTypesEnum.REGULAR ? '' : `${urlType}/`;
   const image = await axios.get<ArrayBuffer>(
     `https://pics.avs.io/${type}/500/500/${airlineIata.toUpperCase()}@2x.png`,
@@ -13,6 +14,26 @@ export async function fetchImage(airlineIata: string, urlType: AirlineImageTypes
   );
 
   return Buffer.from(image.data);
+}
+
+export async function fetchImage(airlineIata: string, urlType: AirlineImageTypesEnum): Promise<Buffer> {
+  if (process.env.REDIS_URL) {
+    const redis = getRedis();
+    const cacheKey = `airline-image---${airlineIata}-${urlType}`;
+    const cached = await redis.getBuffer(cacheKey);
+
+    if (!cached) {
+      const imageBuffer = await fetchImageBuffer(airlineIata, urlType);
+
+      await redis.set(cacheKey, imageBuffer);
+
+      return imageBuffer;
+    }
+
+    return cached;
+  }
+
+  return await fetchImageBuffer(airlineIata, urlType);
 }
 
 export async function getResizedAirlineImage(
