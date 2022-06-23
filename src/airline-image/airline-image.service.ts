@@ -25,7 +25,7 @@ export async function fetchImage(airlineIata: string, urlType: AirlineImageTypes
     if (!cached) {
       const imageBuffer = await fetchImageBuffer(airlineIata, urlType);
 
-      await redis.set(cacheKey, imageBuffer);
+      await redis.set(cacheKey, imageBuffer, 'EX', 86400);
 
       return imageBuffer;
     }
